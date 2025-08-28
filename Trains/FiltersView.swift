@@ -74,12 +74,9 @@ struct FiltersView: View {
             VStack {
                 Spacer()
                 
-                if isCheckedMorning == true ||
-                    isCheckedDay == true ||
-                    isCheckedEvening == true ||
-                    isCheckedNight == true ||
-                    isCheckedYes == true ||
-                    isCheckedNo == true {
+                let checks = [isCheckedMorning, isCheckedDay, isCheckedEvening, isCheckedNight, isCheckedYes, isCheckedNo]
+
+                if checks.contains(true) {
                     Button {
                         
                     } label: {
@@ -107,30 +104,6 @@ struct FiltersView: View {
                         .foregroundStyle(Color.accent)
                         .font(.system(size: 18, weight: .semibold))
                 }
-            }
-        }
-    }
-}
-
-struct CheckBoxView: View {
-    @Binding var isChecked: Bool
-    
-    let timeFilterText: String
-    
-    var body: some View {
-        HStack {
-            Text(timeFilterText)
-                .foregroundStyle(Color.accent)
-                .font(.system(size: 17, weight: .regular))
-            
-            Spacer()
-            
-            Button(action: {
-                isChecked.toggle()
-            }) {
-                Image(systemName: isChecked ? "checkmark.square.fill" : "square")
-                    .foregroundStyle(Color.accent)
-                    .font(.system(size: 17, weight: .regular))
             }
         }
     }

@@ -87,7 +87,7 @@ struct MainView: View {
                 }
                 .padding(16)
                 
-                if !fromCity.isEmpty && !fromStation.isEmpty && !toCity.isEmpty && !toStation.isEmpty {
+                if isFormValid {
                     Button {
                         path.append(.carriers)
                         listOfCarriersViewIsPresenting.toggle()
@@ -133,6 +133,13 @@ struct MainView: View {
                 }
             }
         }
+    }
+    
+    private var isFormValid: Bool {
+        !fromCity.isEmpty &&
+        !fromStation.isEmpty &&
+        !toCity.isEmpty &&
+        !toStation.isEmpty
     }
 }
 
