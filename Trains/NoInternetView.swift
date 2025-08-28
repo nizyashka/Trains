@@ -9,15 +9,20 @@ import SwiftUI
 
 struct NoInternetView: View {
     var body: some View {
-        VStack(alignment: .center) {
-            Image("No Internet")
-                .resizable()
-                .frame(width: 223, height: 223)
-                .clipShape(RoundedRectangle(cornerRadius: 70))
+        ZStack {
+            Color.background
+                .ignoresSafeArea()
             
-            Text("Нет интернета")
-                .foregroundStyle(Color.accent)
-                .font(.system(size: 24, weight: .bold))
+            VStack(alignment: .center) {
+                Image("No Internet")
+                    .resizable()
+                    .frame(width: 223, height: 223)
+                    .clipShape(RoundedRectangle(cornerRadius: 70))
+                
+                Text("Нет интернета")
+                    .foregroundStyle(Color.accent)
+                    .font(.system(size: 24, weight: .bold))
+            }
         }
     }
 }
