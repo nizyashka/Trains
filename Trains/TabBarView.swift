@@ -8,24 +8,29 @@
 import SwiftUI
 import OpenAPIURLSession
 
-struct ContentView: View {
+struct TabBarView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            MainView()
+                .tabItem {
+                    Image(systemName: "arrow.up.message.fill")
+                }
+            
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "gearshape.fill")
+                }
         }
-        .padding()
+        .tint(.accent)
         .onAppear {
-            testFetchStations()
-            testFetchCopyright()
-            testFetchSearch()
-            testFetchSchedule()
-            testFetchThread()
-            testFetchNearestSettlement()
-            testFetchCarrier()
-            testFetchStationsList()
+//            testFetchStations()
+//            testFetchCopyright()
+//            testFetchSearch()
+//            testFetchSchedule()
+//            testFetchThread()
+//            testFetchNearestSettlement()
+//            testFetchCarrier()
+//            testFetchStationsList()
         }
     }
     
@@ -229,5 +234,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    TabBarView()
 }
