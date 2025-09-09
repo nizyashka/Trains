@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 
 struct StoriesView: View {
-    struct Configuration {
+    private struct Configuration {
         let timerTickInternal: TimeInterval
         let progressPerTick: CGFloat
         

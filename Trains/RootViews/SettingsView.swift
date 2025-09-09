@@ -59,41 +59,6 @@ struct SettingsView: View {
             }
         }
         .animation(.easeIn(duration: 0.4), value: isAppDarkMode)
-        
-        //        NavigationStack(path: $path) {
-        //            ZStack {
-        //                Color.background
-        //                    .ignoresSafeArea()
-        //
-        //                VStack {
-        //                    Text("Экран настроек")
-        //                        .foregroundStyle(Color.accent)
-        //
-        //                    Button {
-        //                        path.append("ServerErrorView")
-        //                    } label: {
-        //                        Text("Экран Ошибка сервера")
-        //                            .foregroundStyle(Color.accent)
-        //                    }
-        //                    .buttonStyle(.bordered)
-        //
-        //                    Button {
-        //                        path.append("NoInternetView")
-        //                    } label: {
-        //                        Text("Экран Нет интернета")
-        //                            .foregroundStyle(Color.accent)
-        //                    }
-        //                    .buttonStyle(.bordered)
-        //                }
-        //            }
-        //            .navigationDestination(for: String.self) { value in
-        //                if value == "ServerErrorView" {
-        //                    ServerErrorView()
-        //                } else if value == "NoInternetView" {
-        //                    NoInternetView()
-        //                }
-        //            }
-        //        }
     }
 }
 
