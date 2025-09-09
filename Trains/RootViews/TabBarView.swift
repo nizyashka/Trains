@@ -9,19 +9,21 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct TabBarView: View {
+    @Binding var isAppDarkMode: Bool
+    
     var body: some View {
         TabView {
-            MainView()
+            MainView(isAppDarkMode: $isAppDarkMode)
                 .tabItem {
                     Image(systemName: "arrow.up.message.fill")
                 }
             
-            SettingsView()
+            SettingsView(isAppDarkMode: $isAppDarkMode)
                 .tabItem {
                     Image(systemName: "gearshape.fill")
                 }
         }
-        .tint(.accent)
+        .tint(isAppDarkMode ? .white : Color.backgroundBlackStatic)
         .onAppear {
 //            testFetchStations()
 //            testFetchCopyright()
@@ -62,7 +64,7 @@ struct TabBarView: View {
         }
     }
     
-    func testFetchCopyright() {
+    func testFetchCopyright() -> Task<Copyright, Never> {
         Task {
             do {
                 let client = Client(
@@ -79,9 +81,11 @@ struct TabBarView: View {
                 let copyright = try await service.getCopyright(format: "json")
                 
                 print("Successfully fetched copyright: \(copyright)")
+                return copyright
 //                print("Successfully fetched copyright.")
             } catch {
                 print("Error fetching copyright: \(error)")
+                return Copyright()
             }
         }
     }
@@ -234,5 +238,7 @@ struct TabBarView: View {
 }
 
 #Preview {
-    TabBarView()
+    @Previewable @State var isAppDarkMode: Bool = false
+    
+    TabBarView(isAppDarkMode: $isAppDarkMode)
 }

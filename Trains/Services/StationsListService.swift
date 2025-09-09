@@ -30,7 +30,7 @@ final class StationsListService: StationsListServiceProtocol {
         let responseBody = try response.ok.body.html
         
         let limit = 50 * 1024 * 1024
-        var fullData = try await Data(collecting: responseBody, upTo: limit)
+        let fullData = try await Data(collecting: responseBody, upTo: limit)
         
         let allStations = try JSONDecoder().decode(StationsList.self, from: fullData)
         

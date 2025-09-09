@@ -13,10 +13,12 @@ enum Route: Hashable {
     case carriers
     case carrierCard
     case filters
+    case stories(firstToOpen: Story)
 }
 
 struct MainView: View {
     @State private var path: [Route] = []
+    @Binding var isAppDarkMode: Bool
     
     @State var fromCity = ""
     @State var fromStation = ""
@@ -24,10 +26,26 @@ struct MainView: View {
     @State var toStation = ""
     @State var listOfCarriersViewIsPresenting = false
     
+    @State var stories: [Story] = [.story1, .story2, .story3]
+    private let gridItems = [GridItem()]
+    
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
-                Spacer()
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHGrid(rows: gridItems, spacing: 12) {
+                        ForEach(stories.indices) { index in
+                            StoryCard(backgroundImage: stories[index].backgroundImage, description: stories[index].description)
+                                .overlay(setOverlay(isViewed: stories[index].isViewed))
+                                .onTapGesture {
+                                    stories[index].isViewed = true
+                                    path.append(.stories(firstToOpen: stories[index]))
+                                }
+                        }
+                    }
+                    .frame(height: 140)
+                    .padding(16)
+                }
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
@@ -104,7 +122,6 @@ struct MainView: View {
                 }
                 
                 Spacer()
-                Spacer()
             }
             .background(Color.background)
             .navigationDestination(for: Route.self) { route in
@@ -130,6 +147,10 @@ struct MainView: View {
                     CarrierCardView(path: $path)
                 case .filters:
                     FiltersView(path: $path)
+                case .stories(firstToOpen: let firstStory):
+                    if let index = stories.firstIndex(of: firstStory) {
+                        StoriesView(stories: $stories, startStoryIndex: index, path: $path)
+                    }
                 }
             }
         }
@@ -141,8 +162,20 @@ struct MainView: View {
         !toCity.isEmpty &&
         !toStation.isEmpty
     }
+    
+    private func setOverlay(isViewed: Bool) -> AnyView {
+        if isViewed {
+            return AnyView (RoundedRectangle(cornerRadius: 16)
+                .fill((isAppDarkMode ? Color.gray : Color.white).opacity(0.5)))
+        } else {
+            return AnyView (RoundedRectangle(cornerRadius: 16)
+                .stroke(.blue, lineWidth: 4))
+        }
+    }
 }
 
 #Preview {
-    MainView()
+    @Previewable @State var isAppDarkMode: Bool = false
+    
+    MainView(isAppDarkMode: $isAppDarkMode)
 }
