@@ -8,24 +8,17 @@
 import SwiftUI
 
 struct StationsView: View {
-    @Binding var station: String
     @Binding var path: [Route]
+    @Binding var viewModel: MainViewModel
     
     @State private var searchText: String = ""
     
     let city: String
     let isFrom: Bool
     
-    private let stations: [String] = ["Киевский вокзал",
-                                      "Курский вокзал",
-                                      "Ярославский вокзал",
-                                      "Белорусский вокзал",
-                                      "Савеловский вокзал",
-                                      "Ленинградский вокзал"]
-    
     private var filteredStations: [String] {
-        guard !searchText.isEmpty else { return stations }
-        return stations.filter { $0.localizedCaseInsensitiveContains(searchText) || searchText.localizedStandardContains($0) }
+        guard !searchText.isEmpty else { return viewModel.stations }
+        return viewModel.stations.filter { $0.localizedCaseInsensitiveContains(searchText) || searchText.localizedStandardContains($0) }
     }
     
     var body: some View {
@@ -34,7 +27,12 @@ struct StationsView: View {
                 LazyVStack {
                     ForEach(filteredStations, id: \.self) { station in
                         Button {
-                            self.station = station
+                            if isFrom {
+                                viewModel.fromStation = station
+                            } else {
+                                viewModel.toStation = station
+                            }
+                            
                             path = []
                         } label: {
                             HStack {
@@ -81,15 +79,4 @@ struct StationsView: View {
         }
         .background(Color.background)
     }
-}
-
-#Preview {
-    @Previewable var city: String = ""
-    @Previewable @State var station: String = ""
-    @Previewable @State var path: [Route] = []
-    
-    StationsView(station: $station,
-                 path: $path,
-                 city: city,
-                 isFrom: true)
 }

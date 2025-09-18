@@ -9,16 +9,16 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct TabBarView: View {
-    @Binding var isAppDarkMode: Bool
+    let isAppDarkMode = UserDefaults.standard.bool(forKey: "isAppDarkMode")
     
     var body: some View {
         TabView {
-            MainView(isAppDarkMode: $isAppDarkMode)
+            MainView()
                 .tabItem {
                     Image(systemName: "arrow.up.message.fill")
                 }
             
-            SettingsView(isAppDarkMode: $isAppDarkMode)
+            SettingsView()
                 .tabItem {
                     Image(systemName: "gearshape.fill")
                 }
@@ -238,7 +238,5 @@ struct TabBarView: View {
 }
 
 #Preview {
-    @Previewable @State var isAppDarkMode: Bool = false
-    
-    TabBarView(isAppDarkMode: $isAppDarkMode)
+    TabBarView()
 }

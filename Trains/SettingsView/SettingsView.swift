@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @State var path: [String] = []
-    @Binding var isAppDarkMode: Bool
+    
+    @AppStorage("isAppDarkMode") var isAppDarkMode: Bool = false
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -54,7 +55,7 @@ struct SettingsView: View {
             }
             .navigationDestination(for: String.self) { value in
                 if value == "UserAgreementView" {
-                    UserAgreementView(path: $path, isAppDarkMode: $isAppDarkMode)
+                    UserAgreementView(path: $path)
                 }
             }
         }
@@ -63,7 +64,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    @Previewable @State var isAppDarkMode: Bool = false
-
-    SettingsView(isAppDarkMode: $isAppDarkMode)
+    SettingsView()
 }

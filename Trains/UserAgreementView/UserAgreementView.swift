@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UserAgreementView: View {
     @Binding var path: [String]
-    @Binding var isAppDarkMode: Bool
+    let isAppDarkMode = UserDefaults.standard.bool(forKey: "isAppDarkMode")
     
     var body: some View {
         Color(isAppDarkMode ? Color.backgroundBlackStatic : .white)
@@ -39,7 +39,6 @@ struct UserAgreementView: View {
 
 #Preview {
     @Previewable @State var path: [String] = []
-    @Previewable @State var isAppDarkMode: Bool = false
     
-    UserAgreementView(path: $path, isAppDarkMode: $isAppDarkMode)
+    UserAgreementView(path: $path)
 }

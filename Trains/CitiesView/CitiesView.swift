@@ -8,38 +8,34 @@
 import SwiftUI
 
 struct CitiesView: View {
-    @Binding var city: String
-    @Binding var station: String
+    @Binding var viewModel: MainViewModel
     @Binding var path: [Route]
     
     @State private var searchText: String = ""
     
     let isFrom: Bool
     
-    private let cities: [String] = ["Москва",
-                                    "Санкт-Петербург",
-                                    "Сочи",
-                                    "Горный воздух",
-                                    "Краснодар",
-                                    "Казань",
-                                    "Омск"]
-    
-    private var filteredCities: [String] {
-        guard !searchText.isEmpty else { return cities }
-        return cities.filter { $0.localizedCaseInsensitiveContains(searchText) || searchText.localizedStandardContains($0) }
+    private var filteredCities: [Settlement] {
+        guard !searchText.isEmpty else { return viewModel.settlements }
+        return viewModel.settlements.filter { $0.title.localizedCaseInsensitiveContains(searchText) || searchText.localizedStandardContains($0.title) }
     }
     
     var body: some View {
         ZStack {
             ScrollView {
                 LazyVStack {
-                    ForEach(filteredCities, id: \.self) { city in
+                    ForEach(filteredCities) { city in
                         Button {
-                            self.city = city
-                            path.append(.stations(city: city, isFrom: isFrom))
+                            if isFrom {
+                                viewModel.fromCity = city.title
+                            } else {
+                                viewModel.toCity = city.title
+                            }
+                            
+                            path.append(.stations(city: city.title, isFrom: isFrom))
                         } label: {
                             HStack {
-                                Text(city)
+                                Text(city.title)
                                     .font(.system(size: 17))
                                 
                                 Spacer()
@@ -81,17 +77,19 @@ struct CitiesView: View {
             }
         }
         .background(Color.background)
+        .task {
+            await viewModel.loadSettlements()
+        }
     }
 }
 
-#Preview {
-    @Previewable @State var city: String = ""
-    @Previewable @State var station: String = ""
-    @Previewable @State var path: [Route] = []
-    
-    CitiesView(
-        city: $city,
-        station: $station,
-        path: $path,
-        isFrom: true)
-}
+//#Preview {
+//    @Previewable @State var city: String = ""
+//    @Previewable @State var station: String = ""
+//    @Previewable @State var path: [Route] = []
+//    
+//    CitiesView(
+//        viewModel: CitiesViewModel(city: city, station: station),
+//        path: $path,
+//        isFrom: true)
+//}
