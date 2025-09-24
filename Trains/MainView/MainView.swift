@@ -9,9 +9,9 @@ import SwiftUI
 
 enum Route: Hashable {
     case cities(isFrom: Bool)
-    case stations(city: String, isFrom: Bool)
+    case stations(stations: [Station], isFrom: Bool)
     case carriers
-    case carrierCard
+    case carrierCard(carrier: CarrierInfo)
     case filters
     case stories(firstToOpen: Story)
 }
@@ -19,6 +19,12 @@ enum Route: Hashable {
 struct MainView: View {
     @State var viewModel = MainViewModel()
     @State private var path: [Route] = []
+    @State var checks = Checks(isCheckedMorning: false,
+                               isCheckedDay: false,
+                               isCheckedEvening: false,
+                               isCheckedNight: false,
+                               isCheckedYes: true,
+                               isCheckedNo: false)
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -49,20 +55,24 @@ struct MainView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .cities(let isFrom):
-                    CitiesView(viewModel: $viewModel,
-                               path: $path,
-                               isFrom: isFrom)
-                case .stations(let city, let isFrom):
-                    StationsView(path: $path,
-                                 viewModel: $viewModel,
-                                 city: city,
-                                 isFrom: isFrom)
+                    let citiesViewModel = CitiesViewModel(isFrom: isFrom)
+                    CitiesView(viewModel: citiesViewModel, path: $path, city: isFrom ? $viewModel.fromCity : $viewModel.toCity)
+                    
+                case .stations(let stations, let isFrom):
+                    let stationsViewModel = StationsViewModel(stations: stations)
+                    StationsView(viewModel: stationsViewModel, path: $path, station: isFrom ? $viewModel.fromStation : $viewModel.toStation)
+                    
                 case .carriers:
-                    ListOfCarriersView(path: $path, viewModel: $viewModel)
-                case .carrierCard:
-                    CarrierCardView(path: $path)
+                    let listOfCarriersViewModel = ListOfCarriersViewModel(fromCity: viewModel.fromCity, fromStation: viewModel.fromStation, toCity: viewModel.toCity, toStation: viewModel.toStation, checks: $checks)
+                    
+                    ListOfCarriersView(viewModel: listOfCarriersViewModel, path: $path)
+                    
+                case .carrierCard(let carrier):
+                    CarrierCardView(path: $path, carrier: carrier)
+                    
                 case .filters:
-                    FiltersView(path: $path)
+                    FiltersView(checks: $checks, path: $path)
+                    
                 case .stories(firstToOpen: let firstStory):
                     if let index = viewModel.stories.firstIndex(of: firstStory) {
                         StoriesView(startStoryIndex: index, path: $path, viewModel: $viewModel)

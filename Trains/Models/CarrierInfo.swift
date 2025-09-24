@@ -7,13 +7,10 @@
 
 import Foundation
 
-struct CarrierInfo: Hashable {
+struct CarrierInfo: Identifiable, Hashable, Sendable {
+    let id: Int
     let title: String
+    let phone: String
     let logo: String
-    let dateDeparture: String
-    let timeDeparture: String
-    let timeArrival: String
-    let estimatedTripTime: String
-    let isWithTransfers: Bool
-    let transfer: String
+    let email: String
 }

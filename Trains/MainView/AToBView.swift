@@ -27,16 +27,16 @@ struct AToBView: View {
                         Button {
                             path.append(.cities(isFrom: true))
                         } label: {
-                            Text(viewModel.fromStation.isEmpty ? "Откуда" : "\(viewModel.fromCity) (\(viewModel.fromStation))")
-                                .foregroundColor(viewModel.fromStation.isEmpty ? .gray : .black)
+                            Text(viewModel.fromStation == nil ? "Откуда" : "\(viewModel.fromCity!.title) (\(viewModel.fromStation!.title))")
+                                .foregroundColor(viewModel.fromStation == nil ? .gray : .black)
                                 .lineLimit(1)
                         }
                         
                         Button {
                             path.append(.cities(isFrom: false))
                         } label: {
-                            Text(viewModel.toStation.isEmpty ? "Куда" : "\(viewModel.toCity) (\(viewModel.toStation))")
-                                .foregroundColor(viewModel.toStation.isEmpty ? .gray : .black)
+                            Text(viewModel.toStation == nil ? "Куда" : "\(viewModel.toCity!.title) (\(viewModel.toStation!.title))")
+                                .foregroundColor(viewModel.toStation == nil ? .gray : .black)
                                 .lineLimit(1)
                         }
                     }

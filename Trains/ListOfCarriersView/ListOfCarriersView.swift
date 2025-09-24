@@ -8,20 +8,28 @@
 import SwiftUI
 
 struct ListOfCarriersView: View {
+    @State var viewModel: ListOfCarriersViewModel
     @Binding var path: [Route]
-    @Binding var viewModel: MainViewModel
     
     var body: some View {
         ZStack {
+            Color.background
+                .ignoresSafeArea()
+            
             ScrollView {
                 VStack(spacing: 0) {
-                    Text("\(viewModel.fromCity) (\(viewModel.fromStation)) → \(viewModel.toCity) (\(viewModel.toStation))")
-                        .foregroundStyle(Color.accent)
-                        .font(.system(size: 24, weight: .bold))
-                        .padding()
+                    if let fromCity = viewModel.fromCity,
+                       let fromStation = viewModel.fromStation,
+                       let toCity = viewModel.toCity,
+                       let toStation = viewModel.toStation {
+                        Text("\(fromCity.title) (\(fromStation.title)) → \(toCity.title) (\(toStation.title))")
+                            .foregroundStyle(Color.accent)
+                            .font(.system(size: 24, weight: .bold))
+                            .padding()
+                    }
                     
                     LazyVStack {
-                        ForEach(viewModel.carriersInfo, id: \.self) { carrier in
+                        ForEach(viewModel.filteredSegments, id: \.id) { segment in
                             ZStack {
                                 RoundedRectangle(cornerRadius: 24)
                                     .fill(Color(.lightGrayCarrier))
@@ -29,26 +37,34 @@ struct ListOfCarriersView: View {
                                 
                                 VStack {
                                     HStack {
-                                        Image(carrier.logo)
-                                            .resizable()
-                                            .frame(width: 38, height: 38)
+                                        AsyncImage(url: URL(string: segment.carrier.logo)!) { result in
+                                            result.image?
+                                                .resizable()
+                                                .scaledToFit()
+                                        }
+                                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                                        .frame(width: 38, height: 38)
+                                        
+                                        //                                        Image(carrier.logo)
+                                        //                                            .resizable()
+                                        //                                            .frame(width: 38, height: 38)
                                         
                                         VStack {
                                             HStack {
-                                                Text(carrier.title)
+                                                Text(segment.carrier.title)
                                                     .foregroundStyle(Color.black)
                                                     .font(.system(size: 17))
                                                 
                                                 Spacer()
                                                 
-                                                Text(carrier.dateDeparture)
+                                                Text(segment.startDate)
                                                     .foregroundStyle(Color.black)
                                                     .font(.system(size: 12))
                                             }
                                             
-                                            if carrier.isWithTransfers {
+                                            if segment.hasTransfers {
                                                 HStack {
-                                                    Text("С пересадкой в \(carrier.transfer)")
+                                                    Text("С пересадкой")
                                                         .font(.system(size: 12))
                                                         .foregroundStyle(.red)
                                                     
@@ -59,7 +75,7 @@ struct ListOfCarriersView: View {
                                     }
                                     
                                     HStack {
-                                        Text(carrier.timeDeparture)
+                                        Text(segment.departure.toTimeString())
                                             .foregroundStyle(Color.black)
                                             .font(.system(size: 17))
                                         
@@ -67,7 +83,7 @@ struct ListOfCarriersView: View {
                                             .fill(Color.gray.opacity(0.5))
                                             .frame(height: 2)
                                         
-                                        Text(carrier.estimatedTripTime)
+                                        Text(hoursString(for: segment.duration))
                                             .foregroundStyle(Color.black)
                                             .font(.system(size: 12))
                                         
@@ -75,7 +91,7 @@ struct ListOfCarriersView: View {
                                             .fill(Color.gray.opacity(0.5))
                                             .frame(height: 2)
                                         
-                                        Text(carrier.timeArrival)
+                                        Text(segment.arrival.toTimeString())
                                             .foregroundStyle(Color.black)
                                             .font(.system(size: 17))
                                     }
@@ -84,7 +100,7 @@ struct ListOfCarriersView: View {
                             }
                             .padding(.horizontal)
                             .onTapGesture {
-                                path.append(.carrierCard)
+                                path.append(.carrierCard(carrier: segment.carrier))
                             }
                         }
                     }
@@ -115,7 +131,7 @@ struct ListOfCarriersView: View {
             VStack {
                 Spacer()
                 
-                Text(viewModel.carriersInfo.isEmpty ? "Вариантов нет" : "")
+                Text(viewModel.segments.isEmpty ? "Вариантов нет" : "")
                     .foregroundStyle(Color.accent)
                     .font(.system(size: 24, weight: .bold))
                     .padding()
@@ -135,6 +151,27 @@ struct ListOfCarriersView: View {
                         .font(.system(size: 18, weight: .semibold))
                 }
             }
+        }
+        .task {
+            await viewModel.loadSegments()
+        }
+    }
+    
+    func hoursString(for value: Int) -> String {
+        let lastTwo = value % 100
+        let lastOne = value % 10
+        
+        if lastTwo >= 11 && lastTwo <= 14 {
+            return "\(value) часов"
+        }
+        
+        switch lastOne {
+        case 1:
+            return "\(value) час"
+        case 2...4:
+            return "\(value) часа"
+        default:
+            return "\(value) часов"
         }
     }
 }

@@ -7,13 +7,8 @@
 
 import Foundation
 
-struct Settlement: Identifiable {
+struct Settlement: Identifiable, Hashable, Sendable {
     let id: String
     let title: String
     let stations: [Station]
-}
-
-struct Station: Identifiable {
-    let id: String
-    let title: String
 }

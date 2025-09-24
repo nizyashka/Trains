@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct CitiesView: View {
-    @Binding var viewModel: MainViewModel
+    @State var viewModel: CitiesViewModel
     @Binding var path: [Route]
+    @Binding var city: Settlement?
     
     @State private var searchText: String = ""
-    
-    let isFrom: Bool
+    @State var showList: Bool = false
+    @State private var isLoading = true
     
     private var filteredCities: [Settlement] {
         guard !searchText.isEmpty else { return viewModel.settlements }
@@ -22,63 +23,75 @@ struct CitiesView: View {
     
     var body: some View {
         ZStack {
-            ScrollView {
-                LazyVStack {
-                    ForEach(filteredCities) { city in
-                        Button {
-                            if isFrom {
-                                viewModel.fromCity = city.title
-                            } else {
-                                viewModel.toCity = city.title
+            if isLoading {
+                ProgressView("Загружаем города...")
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .foregroundStyle(Color.accent)
+                    .font(.system(size: 16, weight: .medium))
+            } else {
+                ScrollView {
+                    TextField("Введите запрос", text: $searchText)
+                        .textFieldStyle(.roundedBorder)
+                        .padding()
+                    
+                    if showList {
+                        LazyVStack {
+                            ForEach(filteredCities, id: \.id) { city in
+                                Button {
+                                    self.city = city
+                                    searchText = ""
+                                    path.append(.stations(stations: city.stations, isFrom: viewModel.isFrom))
+                                } label: {
+                                    HStack {
+                                        Text(city.title)
+                                            .font(.system(size: 17))
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: "chevron.right")
+                                    }
+                                    .foregroundStyle(Color.accent)
+                                    .padding()
+                                }
                             }
-                            
-                            path.append(.stations(city: city.title, isFrom: isFrom))
-                        } label: {
-                            HStack {
-                                Text(city.title)
-                                    .font(.system(size: 17))
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                            }
-                            .foregroundStyle(Color.accent)
-                            .padding()
                         }
                     }
                 }
-            }
-            .navigationTitle("Выбор города")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar(.hidden, for: .tabBar)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        path.removeLast()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(Color.accent)
-                    }
+                
+                VStack {
+                    Spacer()
+                    
+                    Text(filteredCities.isEmpty ? "Город не найден" : "")
+                        .foregroundStyle(Color.accent)
+                        .font(.system(size: 24, weight: .bold))
+                        .padding()
+                    
+                    Spacer()
                 }
             }
-            .searchable(text: $searchText, prompt: "Введите запрос")
-            
-            VStack {
-                Spacer()
-                
-                Text(filteredCities.isEmpty ? "Город не найден" : "")
-                    .foregroundStyle(Color.accent)
-                    .font(.system(size: 24, weight: .bold))
-                    .padding()
-                
-                Spacer()
+        }
+        .onAppear {
+            showList = true
+        }
+        .navigationTitle("Выбор города")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    path.removeLast()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(Color.accent)
+                }
             }
         }
         .background(Color.background)
         .task {
             await viewModel.loadSettlements()
+            isLoading = false
         }
     }
 }
@@ -87,7 +100,7 @@ struct CitiesView: View {
 //    @Previewable @State var city: String = ""
 //    @Previewable @State var station: String = ""
 //    @Previewable @State var path: [Route] = []
-//    
+//
 //    CitiesView(
 //        viewModel: CitiesViewModel(city: city, station: station),
 //        path: $path,

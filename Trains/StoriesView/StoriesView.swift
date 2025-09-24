@@ -21,7 +21,6 @@ struct StoriesView: View {
     private var currentStoryIndex: Int {
         let indexFromProgress = Int(progress * CGFloat(viewModel.stories.count))
         return indexFromProgress
-        //        return max(indexFromProgress, startStoryIndex)
     }
     private var startStoryIndex: Int
     @State private var progress: CGFloat = 0
@@ -97,11 +96,6 @@ struct StoriesView: View {
                     }
                 }
         )
-        //        .onTapGesture {
-        //            nextStory()
-        //            previousStory()
-        //            resetTimer()
-        //        }
     }
     
     private func timerTick() {
@@ -119,7 +113,6 @@ struct StoriesView: View {
         if currentStoryIndex < viewModel.stories.count - 1 {
             withAnimation {
                 progress = CGFloat(currentStoryIndex + 1) / CGFloat(viewModel.stories.count)
-                //                stories[currentStoryIndex].isViewed = true
             }
         } else {
             cancellable?.cancel()
@@ -133,7 +126,6 @@ struct StoriesView: View {
         } else {
             withAnimation {
                 progress = CGFloat(currentStoryIndex - 1) / CGFloat(viewModel.stories.count)
-                //                stories[currentStoryIndex].isViewed = true
             }
         }
     }

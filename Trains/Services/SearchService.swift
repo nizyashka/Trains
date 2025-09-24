@@ -27,7 +27,8 @@ final class SearchService: SearchServiceProtocol {
         let response = try await client.getScheduleBetweenStations(query: .init(
             apikey: apikey,
             from: from,
-            to: to
+            to: to,
+            transfers: true
         ))
         
         return try response.ok.body.json

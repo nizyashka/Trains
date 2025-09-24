@@ -9,20 +9,19 @@ import SwiftUI
 
 struct SettingsView: View {
     @State var path: [String] = []
-    
-    @AppStorage("isAppDarkMode") var isAppDarkMode: Bool = false
+    @Binding var isAppDarkMode: Bool
     
     var body: some View {
         NavigationStack(path: $path) {
             ZStack {
-                Color(isAppDarkMode ? Color.backgroundBlackStatic : .white)
+                Color(Color.background)
                     .ignoresSafeArea()
                 
                 VStack(alignment: .center, spacing: 38) {
                     Toggle(isOn: $isAppDarkMode) {
                         Text("Темная тема")
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundStyle(isAppDarkMode ? .white : Color.backgroundBlackStatic)
+                            .foregroundStyle(Color.accent)
                     }
                     .tint(.blue)
                     
@@ -32,12 +31,12 @@ struct SettingsView: View {
                         HStack {
                             Text("Пользовательское соглашение")
                                 .font(.system(size: 17, weight: .regular))
-                                .foregroundStyle(isAppDarkMode ? .white : Color.backgroundBlackStatic)
+                                .foregroundStyle(Color.accent)
                             
                             Spacer()
                             
                             Image(systemName: "chevron.right")
-                                .foregroundStyle(isAppDarkMode ? .white : Color.backgroundBlackStatic)
+                                .foregroundStyle(Color.accent)
                                 .font(.system(size: 18, weight: .semibold))
                         }
                     }
@@ -46,7 +45,7 @@ struct SettingsView: View {
                     
                     Text("Приложение использует API «Яндекс.Расписания» \n\nВерсия 1.0 (beta)")
                         .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(isAppDarkMode ? .white : Color.backgroundBlackStatic)
+                        .foregroundStyle(Color.accent)
                         .multilineTextAlignment(.center)
                     
                     
@@ -55,14 +54,15 @@ struct SettingsView: View {
             }
             .navigationDestination(for: String.self) { value in
                 if value == "UserAgreementView" {
-                    UserAgreementView(path: $path)
+                    let userAgreementViewModel = UserAgreementViewModel()
+                    
+                    UserAgreementView(viewModel: userAgreementViewModel, path: $path)
                 }
             }
         }
-        .animation(.easeIn(duration: 0.4), value: isAppDarkMode)
     }
 }
 
-#Preview {
-    SettingsView()
-}
+//#Preview {
+//    SettingsView()
+//}

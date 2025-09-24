@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct TrainsApp: App {
-    let isAppDarkMode = UserDefaults.standard.bool(forKey: "isAppDarkMode")
+    @State private var isAppDarkMode: Bool = false
     
     var body: some Scene {
         WindowGroup {
-            TabBarView()
+            TabBarView(isAppDarkMode: $isAppDarkMode)
                 .preferredColorScheme(isAppDarkMode ? .dark : .light)
         }
     }

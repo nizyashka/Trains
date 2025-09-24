@@ -9,38 +9,48 @@ import SwiftUI
 
 struct CarrierCardView: View {
     @Binding var path: [Route]
+    let carrier: CarrierInfo
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Image("rzdBigLogo")
-                .resizable()
+        ZStack {
+            Color.background
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 16) {
+                AsyncImage(url: URL(string: carrier.logo)!) { result in
+                    result.image?
+                        .resizable()
+                        .scaledToFit()
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 5))
                 .frame(width: 343, height: 104)
-            
-            Text("ОАО «РЖД»")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundStyle(Color.accent)
-            
-            VStack(alignment: .leading) {
-                Text("E-mail")
-                    .font(.system(size: 17, weight: .regular))
+                
+                Text(carrier.title)
+                    .font(.system(size: 24, weight: .bold))
                     .foregroundStyle(Color.accent)
                 
-                Text("i.lozgkina@yandex.ру")
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(.blue)
-            }
-            
-            VStack(alignment: .leading) {
-                Text("Телефон")
-                    .font(.system(size: 17, weight: .regular))
-                    .foregroundStyle(Color.accent)
+                VStack(alignment: .leading) {
+                    Text("E-mail")
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundStyle(Color.accent)
+                    
+                    Text(carrier.email)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(.blue)
+                }
                 
-                Text("+7 (904) 329-27-71")
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundStyle(.blue)
+                VStack(alignment: .leading) {
+                    Text("Телефон")
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundStyle(Color.accent)
+                    
+                    Text(carrier.phone)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(.blue)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
         }
         .navigationTitle("Информация о перевозчике")
         .navigationBarBackButtonHidden(true)
@@ -59,8 +69,8 @@ struct CarrierCardView: View {
     }
 }
 
-#Preview {
-    @Previewable @State var path: [Route] = []
-    
-    CarrierCardView(path: $path)
-}
+//#Preview {
+//    @Previewable @State var path: [Route] = []
+//    
+//    CarrierCardView(path: $path)
+//}
