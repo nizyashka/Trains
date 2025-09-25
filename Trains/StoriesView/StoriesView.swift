@@ -16,13 +16,11 @@ struct StoriesView: View {
         }
     }
     
-    @Binding var stories: [Story]
     private let configuration: Configuration
-    private var currentStory: Story { stories[currentStoryIndex] }
+    private var currentStory: Story { viewModel.stories[currentStoryIndex] }
     private var currentStoryIndex: Int {
-        let indexFromProgress = Int(progress * CGFloat(stories.count))
+        let indexFromProgress = Int(progress * CGFloat(viewModel.stories.count))
         return indexFromProgress
-        //        return max(indexFromProgress, startStoryIndex)
     }
     private var startStoryIndex: Int
     @State private var progress: CGFloat = 0
@@ -30,19 +28,20 @@ struct StoriesView: View {
     @State private var cancellable: Cancellable?
     
     @Binding var path: [Route]
+    @Binding var viewModel: MainViewModel
     
-    init(stories: Binding<[Story]>, startStoryIndex: Int, path: Binding<[Route]>) {
-        _stories = stories
+    init(startStoryIndex: Int, path: Binding<[Route]>, viewModel: Binding<MainViewModel>) {
         self.startStoryIndex = startStoryIndex
         _path = path
-        configuration = Configuration(storiesCount: stories.count)
+        _viewModel = viewModel
+        configuration = Configuration(storiesCount: viewModel.stories.count)
         timer = Self.createTimer(configuration: configuration)
     }
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
             StoryView(story: currentStory)
-            ProgressBar(numberOfSections: stories.count, progress: progress)
+            ProgressBar(numberOfSections: viewModel.stories.count, progress: progress)
                 .padding(.init(top: 28, leading: 12, bottom: 12, trailing: 12))
             
             HStack(spacing: 0) {
@@ -71,7 +70,7 @@ struct StoriesView: View {
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
             timer = Self.createTimer(configuration: configuration)
-            progress = CGFloat(startStoryIndex) / CGFloat(stories.count)
+            progress = CGFloat(startStoryIndex) / CGFloat(viewModel.stories.count)
             cancellable = timer.connect()
         }
         .onDisappear {
@@ -97,11 +96,6 @@ struct StoriesView: View {
                     }
                 }
         )
-        //        .onTapGesture {
-        //            nextStory()
-        //            previousStory()
-        //            resetTimer()
-        //        }
     }
     
     private func timerTick() {
@@ -111,15 +105,14 @@ struct StoriesView: View {
             path = []
         } else {
             progress = nextProgress
-            stories[currentStoryIndex].isViewed = true
+            viewModel.stories[currentStoryIndex].isViewed = true
         }
     }
     
     private func nextStory() {
-        if currentStoryIndex < stories.count - 1 {
+        if currentStoryIndex < viewModel.stories.count - 1 {
             withAnimation {
-                progress = CGFloat(currentStoryIndex + 1) / CGFloat(stories.count)
-                //                stories[currentStoryIndex].isViewed = true
+                progress = CGFloat(currentStoryIndex + 1) / CGFloat(viewModel.stories.count)
             }
         } else {
             cancellable?.cancel()
@@ -132,8 +125,7 @@ struct StoriesView: View {
             progress = 0
         } else {
             withAnimation {
-                progress = CGFloat(currentStoryIndex - 1) / CGFloat(stories.count)
-                //                stories[currentStoryIndex].isViewed = true
+                progress = CGFloat(currentStoryIndex - 1) / CGFloat(viewModel.stories.count)
             }
         }
     }
@@ -147,11 +139,4 @@ struct StoriesView: View {
     private static func createTimer(configuration: Configuration) -> Timer.TimerPublisher {
         Timer.publish(every: configuration.timerTickInternal, on: .main, in: .common)
     }
-}
-
-#Preview {
-    @Previewable @State var stories: [Story] = [.story1, .story2, .story3]
-    @Previewable @State var path: [Route] = []
-    
-    StoriesView(stories: $stories, startStoryIndex: 0, path: $path)
 }
