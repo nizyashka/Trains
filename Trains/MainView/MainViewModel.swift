@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-class MainViewModel {
+final class MainViewModel {
     var isAppDarkMode = UserDefaults.standard.bool(forKey: "isAppDarkMode")
     var fromCity: Settlement?
     var fromStation: Station?

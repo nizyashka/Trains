@@ -17,10 +17,27 @@ struct CarrierCardView: View {
                 .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 16) {
-                AsyncImage(url: URL(string: carrier.logo)!) { result in
-                    result.image?
-                        .resizable()
-                        .scaledToFit()
+                AsyncImage(url: URL(string: carrier.logo)) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .frame(width: 343, height: 104)
+
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+
+                    case .failure:
+                        Image(systemName: "photo")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.gray)
+                            .frame(width: 50, height: 50)
+
+                    @unknown default:
+                        EmptyView()
+                    }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 5))
                 .frame(width: 343, height: 104)

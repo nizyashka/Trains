@@ -8,14 +8,6 @@
 import SwiftUI
 
 struct FiltersView: View {
-//        @State var isCheckedMorning = false
-//        @State var isCheckedDay = false
-//        @State var isCheckedEvening = false
-//        @State var isCheckedNight = false
-//        @State var isCheckedYes = false
-//        @State var isCheckedNo = false
-    
-//    @State var viewModel: ListOfCarriersViewModel
     @Binding var checks: Checks
     @Binding var path: [Route]
     
@@ -111,9 +103,3 @@ struct FiltersView: View {
         }
     }
 }
-
-//#Preview {
-//    @Previewable @State var path: [Route] = []
-//    
-//    FiltersView(path: $path)
-//}

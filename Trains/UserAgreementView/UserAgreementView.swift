@@ -13,27 +13,41 @@ struct UserAgreementView: View {
     @State private var isLoading = true
     
     var body: some View {
-        ZStack {
-            if isLoading {
-                ProgressView("Загружаем пользовательское соглашение...")
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .foregroundStyle(Color.accent)
-                    .font(.system(size: 16, weight: .medium))
-            } else {
+        ScrollView {
+            ZStack {
                 Color(Color.background)
                     .ignoresSafeArea()
-                    .overlay {
-                        Text(viewModel.copyrightText)
-                            .font(.system(size: 17, weight: .regular))
-                            .foregroundStyle(Color.accent)
-                            .lineLimit(nil)
-                            .padding()
-                    }
+                
+                VStack(alignment: .leading) {
+                    Text(Constants.text1)
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(Color.accent)
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.leading)
+                        .padding()
+                    
+                    Text(Constants.text2)
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundStyle(Color.accent)
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.leading)
+                        .padding()
+                    
+                    Text(Constants.text3)
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(Color.accent)
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.leading)
+                        .padding()
+                    
+                    Text(Constants.text4)
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundStyle(Color.accent)
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.leading)
+                        .padding()
+                }
             }
-        }
-        .task {
-            await viewModel.loadCopyright()
-            isLoading = false
         }
         .navigationTitle("Пользовательское соглашение")
         .navigationBarTitleDisplayMode(.inline)

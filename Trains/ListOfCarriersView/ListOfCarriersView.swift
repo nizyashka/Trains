@@ -45,10 +45,6 @@ struct ListOfCarriersView: View {
                                         .clipShape(RoundedRectangle(cornerRadius: 5))
                                         .frame(width: 38, height: 38)
                                         
-                                        //                                        Image(carrier.logo)
-                                        //                                            .resizable()
-                                        //                                            .frame(width: 38, height: 38)
-                                        
                                         VStack {
                                             HStack {
                                                 Text(segment.carrier.title)

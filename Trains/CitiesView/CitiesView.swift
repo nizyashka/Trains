@@ -30,9 +30,7 @@ struct CitiesView: View {
                     .font(.system(size: 16, weight: .medium))
             } else {
                 ScrollView {
-                    TextField("Введите запрос", text: $searchText)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
+                    CustomSearchBar(text: $searchText)
                     
                     if showList {
                         LazyVStack {

@@ -23,9 +23,7 @@ struct StationsView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                TextField("Введите запрос", text: $searchText)
-                    .textFieldStyle(.roundedBorder)
-                    .padding()
+                CustomSearchBar(text: $searchText)
                 
                 if showList {
                     LazyVStack {

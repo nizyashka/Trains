@@ -25,6 +25,8 @@ final class UserAgreementViewModel {
             return
         }
         
+        print(copyright)
+        
         self.copyrightText = copyrightText
     }
 }
