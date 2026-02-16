@@ -1,10 +1,3 @@
-//
-//  CustomSearchBar.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 25.09.2025.
-//
-
 import SwiftUI
 
 struct CustomSearchBar: View {

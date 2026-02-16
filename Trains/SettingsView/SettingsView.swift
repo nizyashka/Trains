@@ -1,10 +1,3 @@
-//
-//  SettingsView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 15.08.2025.
-//
-
 import SwiftUI
 
 struct SettingsView: View {
@@ -62,7 +55,3 @@ struct SettingsView: View {
         }
     }
 }
-
-//#Preview {
-//    SettingsView()
-//}

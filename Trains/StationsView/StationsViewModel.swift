@@ -1,10 +1,3 @@
-//
-//  StationsViewModel.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 19.09.2025.
-//
-
 import SwiftUI
 
 @MainActor

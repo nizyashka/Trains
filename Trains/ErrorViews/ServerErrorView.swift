@@ -1,10 +1,3 @@
-//
-//  ServerErrorView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 28.08.2025.
-//
-
 import SwiftUI
 
 struct ServerErrorView: View {

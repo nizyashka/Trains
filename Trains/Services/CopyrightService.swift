@@ -1,10 +1,3 @@
-//
-//  Copyright.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 29.07.2025.
-//
-
 import OpenAPIRuntime
 import OpenAPIURLSession
 

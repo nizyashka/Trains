@@ -1,10 +1,3 @@
-//
-//  CitiesView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 18.08.2025.
-//
-
 import SwiftUI
 
 struct CitiesView: View {
@@ -93,14 +86,3 @@ struct CitiesView: View {
         }
     }
 }
-
-//#Preview {
-//    @Previewable @State var city: String = ""
-//    @Previewable @State var station: String = ""
-//    @Previewable @State var path: [Route] = []
-//
-//    CitiesView(
-//        viewModel: CitiesViewModel(city: city, station: station),
-//        path: $path,
-//        isFrom: true)
-//}

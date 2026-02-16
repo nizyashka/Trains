@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 29.07.2025.
-//
-
 import SwiftUI
 import OpenAPIURLSession
 
@@ -26,7 +19,3 @@ struct TabBarView: View {
         .tint(isAppDarkMode ? .white : Color.backgroundBlackStatic)
     }
 }
-
-//#Preview {
-//    TabBarView()
-//}

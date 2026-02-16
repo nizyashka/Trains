@@ -1,10 +1,3 @@
-//
-//  ListOfCarriersView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 21.08.2025.
-//
-
 import SwiftUI
 
 struct ListOfCarriersView: View {

@@ -1,10 +1,3 @@
-//
-//  ListOfCarriersViewModel.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 21.09.2025.
-//
-
 import SwiftUI
 
 @MainActor

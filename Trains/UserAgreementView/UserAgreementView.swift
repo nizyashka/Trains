@@ -1,10 +1,3 @@
-//
-//  UserAgreementView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 08.09.2025.
-//
-
 import SwiftUI
 
 struct UserAgreementView: View {
@@ -66,9 +59,3 @@ struct UserAgreementView: View {
         }
     }
 }
-
-//#Preview {
-//    @Previewable @State var path: [String] = []
-//
-//    UserAgreementView(path: $path)
-//}

@@ -1,10 +1,3 @@
-//
-//  FiltersView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 26.08.2025.
-//
-
 import SwiftUI
 
 struct FiltersView: View {

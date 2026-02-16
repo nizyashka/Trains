@@ -1,10 +1,3 @@
-//
-//  Extension+String.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 22.09.2025.
-//
-
 import Foundation
 
 extension String {

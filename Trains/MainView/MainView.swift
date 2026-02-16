@@ -1,10 +1,3 @@
-//
-//  MainView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 15.08.2025.
-//
-
 import SwiftUI
 
 enum Route: Hashable {

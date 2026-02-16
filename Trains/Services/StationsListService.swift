@@ -1,10 +1,3 @@
-//
-//  StationsListService.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 30.07.2025.
-//
-
 import Foundation
 import OpenAPIRuntime
 import OpenAPIURLSession

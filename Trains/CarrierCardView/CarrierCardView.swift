@@ -1,10 +1,3 @@
-//
-//  CarrierCardView.swift
-//  Trains
-//
-//  Created by Алексей Непряхин on 28.08.2025.
-//
-
 import SwiftUI
 
 struct CarrierCardView: View {
@@ -85,9 +78,3 @@ struct CarrierCardView: View {
         }
     }
 }
-
-//#Preview {
-//    @Previewable @State var path: [Route] = []
-//    
-//    CarrierCardView(path: $path)
-//}
